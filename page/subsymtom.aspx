@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="nursesymtoms.aspx.cs" Inherits="page_nursesymtoms" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="subsymtom.aspx.cs" Inherits="page_subsymtom" %>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -119,7 +119,7 @@
 
               
   
-                        บันทึกอาการหลัก
+                        บันทึกอาการย่อย
                         <asp:TextBox ID="txtsymptomhost" class="form-control" runat="server" Height="63px" TextMode="MultiLine" AutoPostBack="True"  Width="860px" OnTextChanged="txtsymtomhost_TextChanged"  ClientIDMode="Static" ></asp:TextBox>
           
                     

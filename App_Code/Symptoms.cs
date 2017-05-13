@@ -16,6 +16,7 @@ public class Symptoms
     private static SqlCommand command;
     public int Symptoms_detail_ID { get; set; }
     public string Symptoms_host { get; set; }
+    public int Symtoms_host_ID { get; set; }
     public string Subsymptom { get; set; }
     public string result_comment { get; set; }
     public int Symptoms_ID { get; set; }
@@ -31,11 +32,12 @@ public class Symptoms
         conn = new SqlConnection(connectionString);
         command = new SqlCommand("", conn);
     }
-    public Symptoms(int Symptoms_detail_ID,string Symptoms_host, string Subsymptom, 
+    public Symptoms(int Symptoms_detail_ID,string Symptoms_host, int Symtoms_host_ID, string Subsymptom, 
         string result_comment,int Symptoms_ID, int Diagnose_ID)
     {
         this.Symptoms_detail_ID = Symptoms_detail_ID;
         this.Symptoms_host = Symptoms_host;
+        this.Symtoms_host_ID = Symtoms_host_ID;
         this.Subsymptom = Subsymptom;
         this.result_comment = result_comment;
         this.Symptoms_ID = Symptoms_ID;
@@ -52,10 +54,11 @@ public class Symptoms
         this.Diagnose_ID = Diagnose_ID;
     }
 
-    public Symptoms(string Symptoms_host, string Subsymptom,
+    public Symptoms(string Symptoms_host,int Symtoms_host_ID, string Subsymptom,
      string result_comment, int Diagnose_ID)
     {
         this.Symptoms_host = Symptoms_host;
+        this.Symtoms_host_ID = Symtoms_host_ID;
         this.Subsymptom = Subsymptom;
         this.result_comment = result_comment;
         this.Diagnose_ID = Diagnose_ID;
@@ -64,6 +67,7 @@ public class Symptoms
     public static string sent_savesym(Symptoms Sym)
     {
         string query = String.Format("SELECT COUNT(*) FROM Symptoms_detail WHERE Symptoms_detail_ID = '{0}'", Sym.Symptoms_detail_ID);
+        command.CommandText = query;
         try
         {
             conn.Open();
@@ -96,30 +100,38 @@ public class Symptoms
         }
     }
 
-    public static Symptoms GetQuiz(int quiz)
+    public static Symptoms GetQuiz(string sym_host,int sym_ID)
     {
-
-     //   ArrayList list = new ArrayList();
-        string query = string.Format("select Symptoms_host,Sub_Symtoms,result_comment,Diagnose_ID from Symptoms_detail Where Symptoms_ID = {0} ", quiz);
-
+    
         try
         {
+           
+       
+            
+                   string  query = String.Format("select Symptoms_host,Symptoms_host_num,Sub_Symtoms,result_comment,Diagnose_ID from Symptoms_detail  where Symptoms_host = '{0}' AND Symptoms_ID = {1}", sym_host,sym_ID);
             conn.Open();
             command.CommandText = query;
+        
             SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-       
-                string symtom_host = reader.GetString(0);
-                string sub_symtom = reader.GetString(1);
-                string result = reader.GetString(2);
-                int Diagnose_ID = reader.GetInt32(3);
-       
+                    while (reader.Read())
+                    {
 
-                Symptoms symptoms = new Symptoms(symtom_host, sub_symtom, result, Diagnose_ID);
-                return symptoms;
-         
-            }
+                        string symtom_host = reader.GetString(0);
+                int sym_num = reader.GetInt32(1);
+                        string sub_symtom = reader.GetString(2);
+                        string result = reader.GetString(3);
+                        int Diagnose_ID = reader.GetInt32(4);
+
+
+                        Symptoms symptoms = new Symptoms(symtom_host,sym_num, sub_symtom, result, Diagnose_ID);
+                        return symptoms;
+
+                    }
+           
+              
+
+            
+
         }
         finally
         {
@@ -127,16 +139,129 @@ public class Symptoms
         }
 
         return null;
+        /*
+        conn.Open();
+        command.CommandText = query;
+        SqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+
+            string symtom_host = reader.GetString(0);
+            string sub_symtom = reader.GetString(1);
+            string result = reader.GetString(2);
+            int Diagnose_ID = reader.GetInt32(3);
+
+
+            Symptoms symptoms = new Symptoms(symtom_host, sub_symtom, result, Diagnose_ID);
+            return symptoms;
+
+        }*/
     }
 
-    public static DataTable showdataquiz(int quiz)
+    public static Symptoms GetsubQuiz(string sym_sub, int sym_ID)
+    {
+
+        try
+        {
+            string query = String.Format("select Symptoms_host,Symptoms_host_num,Sub_Symtoms,result_comment,Diagnose_ID from Symptoms_detail  where Sub_Symtoms = '{0}' AND Symptoms_ID = {1}", sym_sub, sym_ID);
+            conn.Open();
+            command.CommandText = query;
+
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+
+                string symtom_host = reader.GetString(0);
+                int sym_num = reader.GetInt32(1);
+                string sub_symtom = reader.GetString(2);
+                string result = reader.GetString(3);
+                int Diagnose_ID = reader.GetInt32(4);
+
+
+                Symptoms symptoms = new Symptoms(symtom_host, sym_num, sub_symtom, result, Diagnose_ID);
+                return symptoms;
+
+            }
+
+
+
+
+
+        }
+        finally
+        {
+            conn.Close();
+        }
+
+        return null;
+     
+    }
+
+    public static Symptoms GetQuiz1(string host)
+    {
+
+        try
+        {
+
+
+
+            string query = String.Format("select Symptoms_host,Symptoms_host_num,Sub_Symtoms,result_comment,Diagnose_ID from Symptoms_detail  where Symptoms_host = '{0}'", host);
+            conn.Open();
+            command.CommandText = query;
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+
+                string symtom_host = reader.GetString(0);
+                int sym_num = reader.GetInt32(1);
+                string sub_symtom = reader.GetString(2);
+                string result = reader.GetString(3);
+                int Diagnose_ID = reader.GetInt32(4);
+
+
+                Symptoms symptoms = new Symptoms(symtom_host, sym_num, sub_symtom, result, Diagnose_ID);
+                return symptoms;
+
+            }
+
+
+
+
+
+        }
+        finally
+        {
+            conn.Close();
+        }
+
+        return null;
+        /*
+        conn.Open();
+        command.CommandText = query;
+        SqlDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+
+            string symtom_host = reader.GetString(0);
+            string sub_symtom = reader.GetString(1);
+            string result = reader.GetString(2);
+            int Diagnose_ID = reader.GetInt32(3);
+
+
+            Symptoms symptoms = new Symptoms(symtom_host, sub_symtom, result, Diagnose_ID);
+            return symptoms;
+
+        }*/
+    }
+
+    public static DataTable showdataquiz(int sym_id)
     {
         // DataSet ds = new DataSet();
         DataTable dt = new DataTable();
         SqlDataAdapter dtAdapter = new SqlDataAdapter();
 
         //   string query = string.Format("select name,age,birthday,belong_to,Tel_working,address,Tel_myself from patient WHERE name LIKE '%{0}%'", patient);
-        string query = string.Format("select Symptoms_host,Sub_Symtoms,result_comment,Diagnose_ID from Symptoms_detail  Where Symptoms_ID = {0}  ", quiz);
+        string query = string.Format("select Symptoms_host,Sub_Symtoms,result_comment,Diagnose_ID from Symptoms_detail  where Symptoms_ID = {0}  ", sym_id);
         try
         {
             conn.Open();
@@ -156,6 +281,32 @@ public class Symptoms
         return dt;
     }
 
+    public static DataTable showsubdataquiz(int sym_id)
+    {
+        // DataSet ds = new DataSet();
+        DataTable dt = new DataTable();
+        SqlDataAdapter dtAdapter = new SqlDataAdapter();
+
+        //   string query = string.Format("select name,age,birthday,belong_to,Tel_working,address,Tel_myself from patient WHERE name LIKE '%{0}%'", patient);
+        string query = string.Format("select Symptoms_host,Sub_Symtoms,result_comment,Diagnose_ID from Symptoms_detail  where Symptoms_host_num = {0}  ", sym_id);
+        try
+        {
+            conn.Open();
+            command.CommandText = query;
+            command.CommandType = CommandType.Text;
+
+            dtAdapter.SelectCommand = command;
+
+            dtAdapter.Fill(dt);
+            dtAdapter = null;
+        }
+        finally
+        {
+            conn.Close();
+        }
+
+        return dt;
+    }
     /*
     public static DataTable showdataquiz()
     {

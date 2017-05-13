@@ -6,7 +6,7 @@
                 
         <ul class="v_menu" style="float: left; height: 109px;">      
     <li><a href="#">ตารางเวรแพทย์</a></li>  
-    <li><a href="queueservicems.aspx">ซักประวติคนไข้</a></li>  
+    <li><a href="symtom.aspx">ซักประวติคนไข้</a></li>  
     <li><a href="#">รายงานการวินิจฉัยโรค</a>
          <ul>
             <li><a href="#">ข้อมูลโรครายเดือน</a></li>
